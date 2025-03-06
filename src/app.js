@@ -6,6 +6,9 @@ const NetSuiteOAuth = require('./netsuite-oauth');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Serve static files from assets directory
+app.use('/assets', express.static('assets'));
+
 // Validate required environment variables
 const requiredEnvVars = ['ACCOUNT_ID', 'CLIENT_ID', 'CLIENT_SECRET'];
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -46,16 +49,8 @@ app.get('/', (req, res) => {
     <html>
     <head>
       <title>NetSuite API Toolkit</title>
-      <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
-        pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
-        .button { display: inline-block; background-color: #0078d7; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin: 5px 0; }
-        .warning { background-color: #fff3cd; border: 1px solid #ffecb5; padding: 10px; margin: 10px 0; border-radius: 4px; }
-        .success { background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; margin: 10px 0; border-radius: 4px; }
-        .info { background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; margin: 10px 0; border-radius: 4px; }
-        .token-status { margin: 20px 0; }
-        .api-test { margin: 20px 0; }
-      </style>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="/assets/modern-ui.css">
     </head>
     <body>
       <h1>NetSuite API Toolkit</h1>
@@ -64,25 +59,25 @@ app.get('/', (req, res) => {
       <div class="token-status">
         <h2>Token Status</h2>
         ${hasToken ? `
-          <div class="${tokenValid ? 'success' : 'warning'}">
+          <div class="card ${tokenValid ? 'success' : 'warning'}">
             <h3>${tokenValid ? '✅ Valid Token Available' : '⚠️ Token Expired'}</h3>
             <p><strong>Access Token:</strong> ${netsuiteClient.accessToken.substring(0, 15)}...[truncated]</p>
             <p><strong>Expires:</strong> ${tokenExpiry}</p>
             <p><strong>Status:</strong> ${tokenValid ? 'Valid' : 'Expired or expiring soon'}</p>
-            <div>
+            <div class="flex gap-2">
               <a href="/token/info" class="button">View Token Details</a>
               <a href="/token/refresh" class="button">Refresh Token</a>
-              <a href="/token/clear" class="button" onclick="return confirm('Are you sure you want to delete this token?')">Delete Token</a>
+              <a href="/token/clear" class="button button-danger" onclick="return confirm('Are you sure you want to delete this token?')">Delete Token</a>
             </div>
           </div>
           
-          <div class="api-test" style="margin-top: 30px; background-color: #f0f8ff; padding: 15px; border-radius: 4px; border: 1px solid #b8daff;">
+          <div class="card api-test mt-4">
             <h3>🔍 REST API Browser</h3>
             <p>Explore and interact with all available NetSuite REST API endpoints in our comprehensive browser:</p>
-            <a href="/api-browser" class="button" style="background-color: #007bff;">Launch REST API Browser</a>
+            <a href="/api-browser" class="button">Launch REST API Browser</a>
           </div>
         ` : `
-          <div class="info">
+          <div class="card info">
             <h3>No Token Available</h3>
             <p>You need to authenticate with NetSuite to get a token.</p>
           </div>
@@ -93,10 +88,12 @@ app.get('/', (req, res) => {
       <p>Click the button below to start the OAuth flow:</p>
       <a href="${auth.url}" class="button">Authorize with NetSuite</a>
       
-      <h3>Debug Information</h3>
-      <p>Authorization URL:</p>
-      <pre>${auth.url}</pre>
-      <p>State: ${auth.state}</p>
+      <div class="card mt-4">
+        <h3>Debug Information</h3>
+        <p>Authorization URL:</p>
+        <pre>${auth.url}</pre>
+        <p>State: ${auth.state}</p>
+      </div>
     </body>
     </html>
   `);
