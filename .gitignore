@@ -1,3 +1,78 @@
+# Dependency directories
 node_modules/
-*.env
+jspm_packages/
 
+# Build outputs
+dist/
+build/
+out/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# OAuth tokens
+tokens.json
+*.token.json
+*_token.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Cache directories
+.npm
+.eslintcache
+.node_repl_history
+.yarn-integrity
+.cache
+.parcel-cache
+
+# Testing
+coverage/
+.nyc_output/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+
+# NetSuite specific
+netsuite-token-store/
+netsuite-credentials/
+tokens.json
