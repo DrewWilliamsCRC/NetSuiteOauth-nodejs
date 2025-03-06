@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: netsuite-api-toolkit:latest
+    container_name: netsuite-api-toolkit
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - ACCOUNT_ID=${ACCOUNT_ID}
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - REDIRECT_URI=${REDIRECT_URI:-http://localhost:3000/callback}
+    volumes:
+      # For persisting tokens between container restarts
+      - token-data:/app/tokens
+    networks:
+      - netsuite-network
+
+  # REST API Browser service
+  api-browser:
+    build:
+      context: ./rest-api-browser
+      dockerfile: Dockerfile
+    image: netsuite-api-browser:latest
+    container_name: netsuite-api-browser
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - ACCOUNT_ID=${ACCOUNT_ID}
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - REDIRECT_URI=${REDIRECT_URI:-http://localhost:3001/callback}
+    volumes:
+      # For persisting tokens between container restarts
+      - token-data-browser:/app/tokens
+    networks:
+      - netsuite-network
+
+volumes:
+  token-data:
+  token-data-browser:
+
+networks:
+  netsuite-network:
+    driver: bridge 
