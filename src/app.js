@@ -76,18 +76,6 @@ app.get('/', (req, res) => {
             </div>
           </div>
           
-          <div class="api-test">
-            <h3>Test API with Stored Token</h3>
-            <ul>
-              <li><a href="/test/account">Test /account endpoint</a></li>
-              <li><a href="/test/accountsettings">Test /accountsettings endpoint</a></li>
-              <li><a href="/test/currency">Test /currency endpoint</a></li>
-              <li><a href="/test/salesorder">Test /salesorder endpoint</a></li>
-              <li><a href="/test/customer">Test /customer endpoint</a></li>
-              <li><a href="/test/employee">Test /employee endpoint</a></li>
-            </ul>
-          </div>
-          
           <div class="api-test" style="margin-top: 30px; background-color: #f0f8ff; padding: 15px; border-radius: 4px; border: 1px solid #b8daff;">
             <h3>🔍 REST API Browser</h3>
             <p>Explore and interact with all available NetSuite REST API endpoints in our comprehensive browser:</p>
@@ -497,109 +485,6 @@ app.get('/token/clear', (req, res) => {
     </body>
     </html>
   `);
-});
-
-// Test API endpoints
-app.get('/test/account', async (req, res) => {
-  try {
-    const data = await netsuiteClient.get('/services/rest/record/v1/account');
-    res.send(`
-      <h1>Account API Test</h1>
-      <pre>${JSON.stringify(data, null, 2)}</pre>
-      <a href="/">Back to Home</a>
-    `);
-  } catch (error) {
-    res.send(`
-      <h1>API Error</h1>
-      <p>Error: ${error.message}</p>
-      <a href="/">Back to Home</a>
-    `);
-  }
-});
-
-app.get('/test/accountsettings', async (req, res) => {
-  try {
-    const data = await netsuiteClient.get('/services/rest/record/v1/accountsettings');
-    res.send(`
-      <h1>Account Settings API Test</h1>
-      <pre>${JSON.stringify(data, null, 2)}</pre>
-      <a href="/">Back to Home</a>
-    `);
-  } catch (error) {
-    res.send(`
-      <h1>API Error</h1>
-      <p>Error: ${error.message}</p>
-      <a href="/">Back to Home</a>
-    `);
-  }
-});
-
-app.get('/test/currency', async (req, res) => {
-  try {
-    const data = await netsuiteClient.get('/services/rest/record/v1/currency?limit=5');
-    res.send(`
-      <h1>Currency API Test</h1>
-      <pre>${JSON.stringify(data, null, 2)}</pre>
-      <a href="/">Back to Home</a>
-    `);
-  } catch (error) {
-    res.send(`
-      <h1>API Error</h1>
-      <p>Error: ${error.message}</p>
-      <a href="/">Back to Home</a>
-    `);
-  }
-});
-
-app.get('/test/salesorder', async (req, res) => {
-  try {
-    const data = await netsuiteClient.get('/services/rest/record/v1/salesOrder?limit=5');
-    res.send(`
-      <h1>Sales Order API Test</h1>
-      <pre>${JSON.stringify(data, null, 2)}</pre>
-      <a href="/">Back to Home</a>
-    `);
-  } catch (error) {
-    res.send(`
-      <h1>API Error</h1>
-      <p>Error: ${error.message}</p>
-      <a href="/">Back to Home</a>
-    `);
-  }
-});
-
-app.get('/test/customer', async (req, res) => {
-  try {
-    const data = await netsuiteClient.get('/services/rest/record/v1/customer?limit=5');
-    res.send(`
-      <h1>Customer API Test</h1>
-      <pre>${JSON.stringify(data, null, 2)}</pre>
-      <a href="/">Back to Home</a>
-    `);
-  } catch (error) {
-    res.send(`
-      <h1>API Error</h1>
-      <p>Error: ${error.message}</p>
-      <a href="/">Back to Home</a>
-    `);
-  }
-});
-
-app.get('/test/employee', async (req, res) => {
-  try {
-    const data = await netsuiteClient.get('/services/rest/record/v1/employee?limit=5');
-    res.send(`
-      <h1>Employee API Test</h1>
-      <pre>${JSON.stringify(data, null, 2)}</pre>
-      <a href="/">Back to Home</a>
-    `);
-  } catch (error) {
-    res.send(`
-      <h1>API Error</h1>
-      <p>Error: ${error.message}</p>
-      <a href="/">Back to Home</a>
-    `);
-  }
 });
 
 // REST API Browser page 
