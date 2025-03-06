@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>NetSuite OAuth 2.0 Test</title>
+      <title>NetSuite API Toolkit</title>
       <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
         pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
@@ -58,8 +58,8 @@ app.get('/', (req, res) => {
       </style>
     </head>
     <body>
-      <h1>NetSuite OAuth 2.0 Test</h1>
-      <p>This example follows the exact flow described in the article.</p>
+      <h1>NetSuite API Toolkit</h1>
+      <p>OAuth 2.0 authentication and REST API tools for NetSuite.</p>
       
       <div class="token-status">
         <h2>Token Status</h2>
@@ -82,7 +82,16 @@ app.get('/', (req, res) => {
               <li><a href="/test/account">Test /account endpoint</a></li>
               <li><a href="/test/accountsettings">Test /accountsettings endpoint</a></li>
               <li><a href="/test/currency">Test /currency endpoint</a></li>
+              <li><a href="/test/salesorder">Test /salesorder endpoint</a></li>
+              <li><a href="/test/customer">Test /customer endpoint</a></li>
+              <li><a href="/test/employee">Test /employee endpoint</a></li>
             </ul>
+          </div>
+          
+          <div class="api-test" style="margin-top: 30px; background-color: #f0f8ff; padding: 15px; border-radius: 4px; border: 1px solid #b8daff;">
+            <h3>🔍 REST API Browser</h3>
+            <p>Explore and interact with all available NetSuite REST API endpoints in our comprehensive browser:</p>
+            <a href="/api-browser" class="button" style="background-color: #007bff;">Launch REST API Browser</a>
           </div>
         ` : `
           <div class="info">
@@ -90,19 +99,6 @@ app.get('/', (req, res) => {
             <p>You need to authenticate with NetSuite to get a token.</p>
           </div>
         `}
-      </div>
-      
-      <div class="warning">
-        <h3>⚠️ Important Role Information</h3>
-        <p>The NetSuite Administrator role (ID: 3) cannot be used for OAuth token exchange as it lacks the "Login with Access Tokens" permission.</p>
-        <p>When you click the button below, you may be automatically assigned the Administrator role. If this happens and you get an "invalid_request" error:</p>
-        <ol>
-          <li>Log in to NetSuite</li>
-          <li>Go to Setup > Integration > Integration Management > Manage Integrations</li>
-          <li>Edit your integration record</li>
-          <li>Make sure "Authorization Code Grant" is selected</li>
-          <li>Assign a non-Administrator role with "Login with Access Tokens" permission</li>
-        </ol>
       </div>
       
       <h2>Step 1: Authorize with NetSuite</h2>
@@ -551,6 +547,295 @@ app.get('/test/currency', async (req, res) => {
       <h1>API Error</h1>
       <p>Error: ${error.message}</p>
       <a href="/">Back to Home</a>
+    `);
+  }
+});
+
+app.get('/test/salesorder', async (req, res) => {
+  try {
+    const data = await netsuiteClient.get('/services/rest/record/v1/salesOrder?limit=5');
+    res.send(`
+      <h1>Sales Order API Test</h1>
+      <pre>${JSON.stringify(data, null, 2)}</pre>
+      <a href="/">Back to Home</a>
+    `);
+  } catch (error) {
+    res.send(`
+      <h1>API Error</h1>
+      <p>Error: ${error.message}</p>
+      <a href="/">Back to Home</a>
+    `);
+  }
+});
+
+app.get('/test/customer', async (req, res) => {
+  try {
+    const data = await netsuiteClient.get('/services/rest/record/v1/customer?limit=5');
+    res.send(`
+      <h1>Customer API Test</h1>
+      <pre>${JSON.stringify(data, null, 2)}</pre>
+      <a href="/">Back to Home</a>
+    `);
+  } catch (error) {
+    res.send(`
+      <h1>API Error</h1>
+      <p>Error: ${error.message}</p>
+      <a href="/">Back to Home</a>
+    `);
+  }
+});
+
+app.get('/test/employee', async (req, res) => {
+  try {
+    const data = await netsuiteClient.get('/services/rest/record/v1/employee?limit=5');
+    res.send(`
+      <h1>Employee API Test</h1>
+      <pre>${JSON.stringify(data, null, 2)}</pre>
+      <a href="/">Back to Home</a>
+    `);
+  } catch (error) {
+    res.send(`
+      <h1>API Error</h1>
+      <p>Error: ${error.message}</p>
+      <a href="/">Back to Home</a>
+    `);
+  }
+});
+
+// REST API Browser page 
+app.get('/api-browser', (req, res) => {
+  if (!netsuiteClient.accessToken) {
+    return res.redirect('/');
+  }
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>NetSuite REST API Browser</title>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .button { display: inline-block; background-color: #0078d7; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin: 5px 0; }
+        .warning { background-color: #fff3cd; border: 1px solid #ffecb5; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; margin: 10px 0; border-radius: 4px; }
+        .info { background-color: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; margin: 10px 0; border-radius: 4px; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; margin: 10px 0; border-radius: 4px; }
+        .sidebar { width: 250px; float: left; background: #f8f9fa; height: 100%; padding: 15px; border-radius: 4px; }
+        .content { margin-left: 280px; }
+        .main-container { display: flex; }
+        .resource-list { list-style-type: none; padding: 0; }
+        .resource-list li { margin: 5px 0; }
+        .resource-list a { text-decoration: none; color: #0078d7; }
+        .resource-list a:hover { text-decoration: underline; }
+        .api-section { margin-bottom: 20px; }
+        h2 { border-bottom: 1px solid #eaecef; padding-bottom: 8px; }
+        .record-search { margin: 20px 0; }
+        .record-search input[type="text"] { padding: 8px; width: 300px; border: 1px solid #ddd; border-radius: 4px; }
+        .record-search button { padding: 8px 16px; background-color: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer; }
+      </style>
+    </head>
+    <body>
+      <h1>NetSuite REST API Browser</h1>
+      <p>Explore and test NetSuite REST API endpoints with OAuth 2.0 authentication.</p>
+      <p><a href="/" class="button">Back to Home</a></p>
+      
+      <div class="info">
+        <h2>About the NetSuite REST API</h2>
+        <p>The NetSuite REST API allows you to interact with NetSuite records using standard HTTP methods. This browser helps you explore record-based endpoints.</p>
+      </div>
+      
+      <div class="warning">
+        <h3>⚠️ API Limitations</h3>
+        <p>The NetSuite REST API requires specific URL formats. Record URLs must be constructed as:</p>
+        <pre>https://{accountID}.suitetalk.api.netsuite.com/services/rest/record/v1/{recordname}/{recordid}</pre>
+        <p>Many metadata discovery endpoints may be restricted based on your NetSuite implementation.</p>
+      </div>
+      
+      <div class="record-search">
+        <h2>Search for a Record Type</h2>
+        <form action="/api/records/custom" method="get">
+          <input type="text" name="recordType" placeholder="Enter record type (e.g., customer, salesOrder)" required>
+          <button type="submit">Explore Record Type</button>
+        </form>
+      </div>
+      
+      <h2>Common Record Types</h2>
+      <div class="main-container">
+        <div class="content">
+          <div class="api-section">
+            <h3>Standard Records</h3>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <a href="/api/records/custom?recordType=account" class="button">Account</a>
+              <a href="/api/records/custom?recordType=customer" class="button">Customer</a>
+              <a href="/api/records/custom?recordType=employee" class="button">Employee</a>
+              <a href="/api/records/custom?recordType=salesOrder" class="button">Sales Order</a>
+              <a href="/api/records/custom?recordType=currency" class="button">Currency</a>
+              <a href="/api/records/custom?recordType=invoice" class="button">Invoice</a>
+              <a href="/api/records/custom?recordType=vendor" class="button">Vendor</a>
+              <a href="/api/records/custom?recordType=item" class="button">Item</a>
+              <a href="/api/records/custom?recordType=contact" class="button">Contact</a>
+              <a href="/api/records/custom?recordType=location" class="button">Location</a>
+              <a href="/api/records/custom?recordType=department" class="button">Department</a>
+              <a href="/api/records/custom?recordType=classification" class="button">Classification</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `);
+});
+
+// Updated API endpoint that works with NetSuite's URL restrictions
+app.get('/api/records/custom', async (req, res) => {
+  if (!netsuiteClient.accessToken) {
+    return res.redirect('/');
+  }
+  
+  const recordType = req.query.recordType;
+  
+  if (!recordType) {
+    return res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Missing Record Type</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+          .error { background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; margin: 10px 0; border-radius: 4px; }
+          .button { display: inline-block; background-color: #0078d7; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; }
+        </style>
+      </head>
+      <body>
+        <h1>Error: Missing Record Type</h1>
+        <div class="error">
+          <p>Please specify a record type to explore.</p>
+        </div>
+        <a href="/api-browser" class="button">Back to API Browser</a>
+      </body>
+      </html>
+    `);
+  }
+  
+  const limit = req.query.limit || 5;
+  
+  try {
+    // Fetch records of the specified type with a limit
+    const data = await netsuiteClient.get(`/services/rest/record/v1/${recordType}?limit=${limit}`);
+    
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${recordType} Records</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 1200px; margin: 0 auto; padding: 20px; }
+          pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; max-height: 500px; }
+          .button { display: inline-block; background-color: #0078d7; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin-right: 10px; }
+          .tab { overflow: hidden; border: 1px solid #ccc; background-color: #f1f1f1; }
+          .tab button { background-color: inherit; float: left; border: none; outline: none; cursor: pointer; padding: 14px 16px; transition: 0.3s; }
+          .tab button:hover { background-color: #ddd; }
+          .tab button.active { background-color: #ccc; }
+          .tabcontent { display: none; padding: 6px 12px; border: 1px solid #ccc; border-top: none; }
+          .paginate { margin: 20px 0; }
+          .record-search { margin: 20px 0; }
+          .record-search input[type="text"] { padding: 8px; width: 300px; border: 1px solid #ddd; border-radius: 4px; }
+          .record-search button { padding: 8px 16px; background-color: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        </style>
+        <script>
+          function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+              tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+              tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+          }
+        </script>
+      </head>
+      <body>
+        <h1>${recordType} Records</h1>
+        <p>Displaying records of type '${recordType}' from the NetSuite REST API.</p>
+        
+        <div>
+          <a href="/api-browser" class="button">Back to API Browser</a>
+          <a href="/" class="button">Back to Home</a>
+        </div>
+        
+        <div class="record-search">
+          <h3>Explore Another Record Type</h3>
+          <form action="/api/records/custom" method="get">
+            <input type="text" name="recordType" placeholder="Enter record type (e.g., customer, salesOrder)" required>
+            <button type="submit">Explore Record Type</button>
+          </form>
+        </div>
+        
+        <div class="paginate">
+          <form action="/api/records/custom" method="get">
+            <input type="hidden" name="recordType" value="${recordType}">
+            <label for="limit">Records per page:</label>
+            <input type="number" id="limit" name="limit" value="${limit}" min="1" max="50" style="width: 60px;">
+            <button type="submit">Apply</button>
+          </form>
+        </div>
+        
+        <div class="tab">
+          <button class="tablinks active" onclick="openTab(event, 'Records')">Records</button>
+          <button class="tablinks" onclick="openTab(event, 'Raw')">Raw Response</button>
+        </div>
+        
+        <div id="Records" class="tabcontent" style="display: block;">
+          <h2>Records (${data.count || 0})</h2>
+          <pre>${JSON.stringify(data.items || data, null, 2)}</pre>
+        </div>
+        
+        <div id="Raw" class="tabcontent">
+          <h2>Raw API Response</h2>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        </div>
+        
+        ${data.links && data.links.pagination ? `
+          <div style="margin-top: 20px;">
+            <h3>Pagination</h3>
+            ${data.links.pagination.prev ? `<a href="/api/records/custom?recordType=${recordType}&paginationToken=${encodeURIComponent(data.links.pagination.prev.token)}" class="button">Previous Page</a>` : ''}
+            ${data.links.pagination.next ? `<a href="/api/records/custom?recordType=${recordType}&paginationToken=${encodeURIComponent(data.links.pagination.next.token)}" class="button">Next Page</a>` : ''}
+          </div>
+        ` : ''}
+      </body>
+      </html>
+    `);
+  } catch (error) {
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>API Error</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 1200px; margin: 0 auto; padding: 20px; }
+          pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+          .button { display: inline-block; background-color: #0078d7; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; }
+          .error { background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; margin: 10px 0; border-radius: 4px; }
+        </style>
+      </head>
+      <body>
+        <h1>API Error</h1>
+        
+        <div class="error">
+          <h2>Error Accessing ${recordType} Records</h2>
+          <p>${error.message}</p>
+          <pre>${error.response?.data ? JSON.stringify(error.response.data, null, 2) : error.stack}</pre>
+        </div>
+        
+        <a href="/api-browser" class="button">Back to API Browser</a>
+        <a href="/" class="button">Back to Home</a>
+      </body>
+      </html>
     `);
   }
 });

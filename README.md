@@ -1,6 +1,13 @@
-# NetSuite REST API Client with OAuth 2.0
+# NetSuite API Toolkit
 
-A Node.js client for interacting with the NetSuite REST API using OAuth 2.0 authentication with the Client Credentials grant type.
+A comprehensive Node.js toolkit for working with the NetSuite REST API, featuring OAuth 2.0 authentication and a visual API browser.
+
+## Features
+
+- OAuth 2.0 authentication with NetSuite
+- API test endpoints for common record types
+- Interactive REST API Browser
+- Token management (viewing, refreshing, clearing)
 
 ## Setup
 
@@ -17,6 +24,18 @@ A Node.js client for interacting with the NetSuite REST API using OAuth 2.0 auth
    OAUTH_SCOPE=optional_scope_value
    ```
 
+## Usage
+
+Start the application:
+```bash
+npm start
+```
+
+Then navigate to http://localhost:3000 in your browser to:
+1. Authenticate with NetSuite using OAuth 2.0
+2. Test various API endpoints
+3. Explore the REST API browser
+
 ## NetSuite OAuth 2.0 Setup
 
 Before using this client, you need to set up OAuth 2.0 in your NetSuite account:
@@ -27,64 +46,6 @@ Before using this client, you need to set up OAuth 2.0 in your NetSuite account:
    - Check **TBA: Authorization Flow** and select **Client Credentials**
    - Set appropriate permissions for the integration
    - Save and copy the Client ID and Client Secret
-
-## Usage
-
-The project includes a `NetSuiteClient` class that handles OAuth 2.0 authentication and provides methods for making API requests.
-
-### Example
-
-```javascript
-const NetSuiteClient = require('./src/NetSuiteClient');
-
-async function main() {
-    const client = new NetSuiteClient({
-        accountId: process.env.ACCOUNT_ID,
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        scope: process.env.OAUTH_SCOPE // Optional
-    });
-
-    try {
-        // Get a list of customers
-        const customers = await client.get('/services/rest/record/v1/customer');
-        console.log('Customers:', customers);
-
-        // Create a new customer
-        const newCustomer = {
-            companyName: 'Test Company',
-            email: 'test@example.com',
-            subsidiary: {
-                id: '1',
-                refName: 'Parent Company'
-            }
-        };
-
-        const createdCustomer = await client.post('/services/rest/record/v1/customer', newCustomer);
-        console.log('Created Customer:', createdCustomer);
-
-    } catch (error) {
-        console.error('Error:', error.message);
-    }
-}
-
-main();
-```
-
-## Testing
-
-To test your OAuth 2.0 implementation, run:
-
-```bash
-node src/test-oauth.js
-```
-
-This will perform several tests:
-1. Check environment variables
-2. Test authentication
-3. Test token refresh logic
-4. Test authorization header format
-5. Test a simple API call
 
 ## Available Methods
 
