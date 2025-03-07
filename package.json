@@ -1,48 +1,35 @@
 {
-  "name": "netsuite-api-toolkit",
+  "name": "netsuite-rest-api-browser",
   "version": "1.0.0",
-  "description": "NetSuite API Toolkit with OAuth 2.0 and REST API Browser",
-  "main": "src/app.js",
-  "bin": {
-    "netsuite-api-toolkit": "./bin/cli.js"
-  },
+  "description": "NetSuite REST API Browser with OAuth 2.0 authentication",
+  "main": "rest-api-browser/src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "build": "pkg .",
-    "prepublishOnly": "npm test",
-    "postinstall": "node scripts/post-install.js",
-    "test": "node scripts/test.js"
+    "start": "node rest-api-browser/src/app.js",
+    "dev": "nodemon rest-api-browser/src/app.js",
+    "docker:build": "docker-compose build",
+    "docker:start": "docker-compose up -d",
+    "docker:dev": "./dev.sh"
   },
   "files": [
-    "bin/",
-    "src/",
     "rest-api-browser/",
-    "scripts/",
     "assets/",
-    ".env.example"
+    ".env.sample"
   ],
   "keywords": [
     "netsuite",
     "oauth2",
     "rest",
     "api",
-    "browser",
-    "toolkit"
+    "browser"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",
     "express": "^4.18.2"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
-    "pkg": "^5.8.1"
-  },
-  "pkg": {
-    "targets": ["node16-macos-x64", "node16-win-x64", "node16-linux-x64"],
-    "outputPath": "dist"
+    "nodemon": "^3.0.1"
   }
 }

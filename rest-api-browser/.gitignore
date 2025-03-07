@@ -9,6 +9,7 @@ out/
 
 # Environment variables and secrets
 .env
+.env.backup
 .env.local
 .env.development
 .env.test
