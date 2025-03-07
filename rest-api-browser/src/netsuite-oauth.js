@@ -39,7 +39,16 @@ class NetSuiteOAuth {
     console.log(`Redirect URI: ${this.redirectUri}`);
     console.log(`Token status: ${this.accessToken ? 'Found stored token' : 'No stored token'}`);
     if (this.accessToken) {
-      console.log(`Token expires: ${new Date(this.tokenExpiry).toLocaleString()}`);
+      console.log(`Token expires: ${new Date(this.tokenExpiry).toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        timeZoneName: 'short'
+      })}`);
       console.log(`Token valid: ${this.isTokenValid() ? 'Yes' : 'No, needs refresh'}`);
     }
   }

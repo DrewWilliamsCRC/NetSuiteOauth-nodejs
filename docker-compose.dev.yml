@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  api-browser:
+    build:
+      context: ./rest-api-browser
+      dockerfile: Dockerfile.dev
+    volumes:
+      # Mount source code for live development
+      - ./rest-api-browser/src:/app/src
+      - ./.env:/app/.env
+      - token-data:/app/tokens
+      # Share assets directory
+      - ./assets:/app/assets
+    environment:
+      - NODE_ENV=development
+      - TZ=America/Chicago
+    # Enable stdin_open and tty for interactive debugging if needed
+    stdin_open: true
+    tty: true 

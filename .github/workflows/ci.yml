@@ -24,14 +24,15 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: |
+        npm ci
+        cd rest-api-browser
+        npm ci
+        cd ..
       
-    # Add more steps as needed
-    # - name: Run tests
-    #   run: npm test
+    - name: Run Docker build
+      run: npm run docker:build
     
-    # - name: Run linting
-    #   run: npm run lint
-    
-    # - name: Build
-    #   run: npm run build
+    # Docker tests can be added here later
+    # - name: Run integration tests
+    #   run: npm run test:integration
